@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{%block head %}
+{% block title %}账单{% endblock %}
+<script type="text/javascript">
+aItems = new Array();
+function delete_bill(bill_id)
+  {
+  var name=prompt("请输入您的名字","Liangxu");
+  if (name!=null && name!="")
+  {
+    self.location="/delete_bill/"+bill_id+"/{{bill_table.id}}";
+    document.getElementById(bill_id).hidden = true;
+  }
+}
+
+</script>
+{% endblock %}
+{% block content %}
+{% for id in code %}
+<script type="text/javascript">
+  aItems.push(String({{id}}));
+</script>
+{% endfor %}
+<div class="jumbotron" id="#error">
+{% if info %}
+   <div class="alert alert-info" role="alert">
+      <strong>{{ info }}</strong>
+  </div>
+{% endif %}
+</div>
+<div class="jumbotron" id="table">
+{% if bill_list %}
+ <table class="table table-hover">
+   <thead>
+     <tr><td>名字</td><td>编码</td><td>数量</td><td>单价</td><td>合计</td><td>时间</td><td>备注</td><td>操作</td></tr>
+   </thead>
+   <tbody>
+  {% for bill in bill_list %}
+  	<tr id="{{bill.id}}">
+  	<td>{{ bill.item_code.name}}</td>
+    <td>{{ bill.item_code.code}}</td>
+  	<td>{{bill.number}}</td>
+    <td>{{ bill.item_code.price}}</td>
+    <td>
+    <script type="text/javascript">
+      price = {{ bill.number}} * {{ bill.item_code.price}};
+      var num = new Number(price);
+      document.write(num.toFixed(2));
+    </script>
+    </td>
+    <td>{{bill.created_at}}</td>
+    <td>{{bill.bill_comment}}</td>
+    <td><button onclick="delete_bill({{bill.id}})" class="btn btn-danger">删除</button></td>
+  	</tr>
+  {% endfor %}
+ </table>
+ {% endif %}
+ <p class="bg-info">总价 : {{ bill_table.total_price }} 
+ <h5>(如果删除了产品，请刷新页面)</h5></p>
+
+<div class="pull-middle">
+ <form role="form" action="{% url 'add_bill' %}" method="post" class="form-inline" id="item_form">
+{% csrf_token %}
+  <div id="popup">  
+    <ul id="item_ul" class="list-inline"></ul>  
+  </div>
+   <input type="number" class="form-control" name="item_code" id="item_code" placeholder="添加产品编码" required="required" onkeyup="findItems();"/>
+   <input type="number" class="form-control" name="number" placeholder="产品数量" required="required"/>
+   <input type="text" class="form-control" name="bill_comment" placeholder="添加备注"/>
+    <input type="hidden" name="bill_table" value="{{bill_table.id}}" />
+    <input type="submit" value="添加" class="btn btn-primary"/>
+</form>
+</div>
+</div>
+
+ <div class="jumbotron" id="#form">
+<form role="form" action="{% url 'edit_bill_table' bill_table.id %}" method="post" class="form-inline" >
+{% csrf_token %}
+<div class="form-group">
+    <label>账单备注: </label>
+    <input type="text" class="form-control" name="comment" value="{{bill_table.comment}}" /> 
+</div>
+<div class="form-group">
+      <div class="checkbox">
+          <label>
+          {% if bill_table.is_pay %}
+          <input type="checkbox" name="is_pay" checked="checked"> 已付款
+          {% else %}
+          <input type="checkbox" name="is_pay" > 已付款
+          {% endif %}
+          </label>
+      </div> 
+</div> 
+<div class="form-group">
+    <input type="submit" value="提交" class="btn btn-primary"/>
+</div>
+</form>
+<hr>
+<form role="form" action="{% url 'download_bill' bill_table.id %}" method="get" class="form-inline"><label>下载账单请点击这里： </label><input type="submit" value="下载" class="btn btn-primary"/></form>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="/static/js/auto.js"></script>
+{% endblock %}

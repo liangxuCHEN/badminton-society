@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}出货系统{% endblock %}
+{% block content %}
+<div class="jumbotron">
+<h1>欢迎来到这里</h1>
+<p>这是一个简单的出货系统，首先你在产品清单里面录入你的产品，然后点击出货单，在那里你可以快速地完成出货记录和计算</p>
+<p>管理后台 : http://xxx/admin </p>
+</div>
+<div class="row">
+  <div class="col-sm-6 col-md-3" id="item">
+    <div class="thumbnail">
+      <div class="caption">
+        <h3>产品清单</h3>
+        <p><a href="{% url 'item_index' %} " class="btn btn-primary">产品清单</a></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-md-3" id="bill">
+    <div class="thumbnail">
+      <div class="caption">
+        <h3>账单</h3>
+        <p><a href="{% url 'bill_table_index' %} " class="btn btn-primary">账单管理</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
