@@ -89,8 +89,8 @@ def bill_table_index(request):
         #if not, the emploer only see the bill of himself and can not use the filter
         if not request.user.is_staff:
             comment = request.GET.get('comment', '')
-        if comment != '':
-            bill_tables = bill_tables.filter(comment__contains=comment)
+            if comment != '':
+                bill_tables = bill_tables.filter(comment__contains=comment)
             
         has_pay = request.GET.get('has_pay','')
         if has_pay == "pay":
@@ -257,6 +257,4 @@ def LoginView(request):
 
 def LogoutView(request):
     logout(request)
- #-*- coding: utf-8 -*-
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login, logout
+    return redirect('/')
