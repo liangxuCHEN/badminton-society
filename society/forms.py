@@ -40,7 +40,7 @@ class BillForm(forms.ModelForm):
             number=self.data['number'],
             bill_comment=self.data['bill_comment'],
         )
-        
+"""        
 class AuthenticationForm(forms.Form):
 
             username = forms.CharField(widget=forms.TextInput())
@@ -49,4 +49,3 @@ class AuthenticationForm(forms.Form):
             class Meta:
                 fields = ['username', 'password']
 
-"""

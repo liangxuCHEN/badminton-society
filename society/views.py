@@ -32,7 +32,7 @@ def member_index(request):
     else:
         return HttpResponseRedirect('/login')
 
-def add_one_item(request):
+def add_one_member(request):
     if request.user.is_authenticated():
         if request.method == 'POST':
             data = request.POST
