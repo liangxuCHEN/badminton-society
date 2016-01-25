@@ -10,7 +10,7 @@ class MemberForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = self.cleaned_data
-        code = cleaned_data.get('phone')
+        phone = cleaned_data.get('phone')
 
         if Member.objects.filter(phone=phone).exists():
             self._errors['phone'] = self.error_class(['this phone exists'])  

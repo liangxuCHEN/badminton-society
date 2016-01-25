@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 #from django.contrib.auth import authenticate, login, logout
 from society.models import Member, Personal_bill, Bill_table
 from django import forms
-from society.forms import MemberForm, AuthenticationForm, BillTableForm,PersonalBillForm,
+from society.forms import MemberForm, AuthenticationForm, BillTableForm,PersonalBillForm
 from django.utils import timezone
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 
@@ -207,7 +207,7 @@ def download_bill(request, table_id):
     return response
 
 
-
+"""
 
 
 def LoginView(request):
