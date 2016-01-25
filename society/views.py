@@ -160,11 +160,11 @@ def add_personal_bill(request):
     if request.user.is_authenticated():
         if request.method == 'POST':
             data = request.POST
-            member = Member.objects.filter(phone=data['member_phone']):
+            member = Member.objects.get(phone=data['member_phone'])
             if member:
                 form = PersonalBillForm(data)
                 form.save()
-                member.balance = member.balance - data['price']
+                member.balance = member.balance - int(data['price'])
                 member.save()
                 return redirect("/bill_table_detail/%s/?info=%s" % (data['bill_table'], u"成功添加"))
             else:
