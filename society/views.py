@@ -58,7 +58,7 @@ def member_detail(request, member_id):
             return HttpResponseRedirect('/login')
 
 def update_balance(request):
-	if request.user.is_authenticated(): 
+    if request.user.is_authenticated(): 
             if request.method == 'POST':
                 data = request.POST
                 form = RechargeForm(data)
@@ -66,7 +66,7 @@ def update_balance(request):
                 form.save()
                 return redirect("/member_detail/%s/?info=%s" % (data['member_id'], u"充值成功添加"))
             else:
-                return HttpResponseRedirect('/member')
+                return redirect("/member_detail/%s/?info=%s" % (data['member_id'], u"充值不成功"))
         else:
            return HttpResponseRedirect('/login')
 

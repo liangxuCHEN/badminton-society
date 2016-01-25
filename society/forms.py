@@ -23,12 +23,13 @@ class RechargeForm(forms.ModelForm):
 
     def save(self):
         member = Member.objects.get(id=self.data['member_id'])
+        price = float(self.data['price'])
         member.balance = member.balance + price
         member.save()
         new_recharge = Recharge.objects.create(
             member=member,
             created_at=timezone.now(),
-            price=self.data['price'],
+            price=price,
             comment=self.data['charge_comment'],
         )
 
