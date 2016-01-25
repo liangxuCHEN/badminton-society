@@ -1,5 +1,5 @@
 from django.contrib import admin
-from store.models import Member, Personal_bill, Bill_table
+from society.models import Member, Personal_bill, Bill_table
 
 # Register your models here
 class MemberAdmin(admin.ModelAdmin):
