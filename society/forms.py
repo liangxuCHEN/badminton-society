@@ -1,18 +1,18 @@
  #-*- coding: utf-8 -*-
 from django import forms
-from socitey.models import Member, Personal_bill, Bill_table
+from society.models import Member, Personal_bill, Bill_table
 from django.utils import timezone
 
 class MemberForm(forms.ModelForm):
     class Meta:
-        model = Item
+        model = Member
         fields = ['phone', 'name', 'sexual','balance']
 
     def clean(self):
         cleaned_data = self.cleaned_data
         code = cleaned_data.get('phone')
 
-        if Item.objects.filter(phone=phone).exists():
+        if Member.objects.filter(phone=phone).exists():
             self._errors['phone'] = self.error_class(['this phone exists'])  
 
         return cleaned_data
