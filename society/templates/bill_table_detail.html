@@ -32,7 +32,7 @@ function delete_personal_bill(bill_id)
 {% if personal_bill_list %}
  <table class="table table-hover">
    <thead>
-     <tr><td>名字</td><td>手机</td><td>收费</td><td>余额</td><td>时间</td><td>备注</td><td>操作</td></tr>
+     <tr><td>名字</td><td>手机</td><td>收费</td><td>余额</td><td>备注</td></tr>
    </thead>
    <tbody>
   {% for bill in personal_bill_list %}
@@ -41,7 +41,6 @@ function delete_personal_bill(bill_id)
     <td>{{ bill.member.phone}}</td>
   	<td>{{bill.price}}</td>
     <td>{{ bill.member.balance}}</td>
-    <td>{{bill.created_at}}</td>
     <td>{{bill.bill_comment}}</td>
    <!-- <td><button onclick="delete_personal_bill({{bill.id}})" class="btn btn-danger">删除</button></td>-->
   	</tr>
