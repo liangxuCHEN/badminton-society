@@ -160,7 +160,7 @@ def add_personal_bill(request):
     if request.user.is_authenticated():
         if request.method == 'POST':
             data = request.POST
-            if Member.objects.filter(code=data['member_phone']):
+            if Member.objects.filter(phone=data['member_phone']):
                 form = PersonalBillForm(data)
                 form.save()
                 return redirect("/bill_table_detail/%s/?info=%s" % (data['bill_table'], u"成功添加"))
