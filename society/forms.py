@@ -22,10 +22,14 @@ class RechargeForm(forms.ModelForm):
         model = Recharge
 
     def save(self):
+        member = Member.objects.get(id=self.data['member_id'])
+        price = float(self.data['price'])
+        member.balance = member.balance + price
+        member.save()
         new_recharge = Recharge.objects.create(
             member=member,
             created_at=timezone.now(),
-            price=float(self.date['price']),
+            price=price,
             comment=self.data['charge_comment'],
         )
 
@@ -34,7 +38,7 @@ class BillTableForm(forms.ModelForm):
     class Meta:
         model = Bill_table
 
-    def save(self): # create new table
+    def save(self):# create new table
         new_table=Bill_table.objects.create(
             created_at=timezone.now(),
             total_price=0,
