@@ -5,7 +5,7 @@
         aItems.sort();  //按字母排序  
         function initVars(){  
             //初始化变量  
-            oInputField = document.forms["item_form"].item_code;  
+            oInputField = document.forms["item_form"].member_phone;  
             oPopDiv = document.getElementById("popup");  
             oItem_ul = document.getElementById("item_ul");  
         }  

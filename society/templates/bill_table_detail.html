@@ -16,7 +16,7 @@ function delete_personal_bill(bill_id)
 </script>
 {% endblock %}
 {% block content %}
-{% for id in code %}
+{% for id in phone %}
 <script type="text/javascript">
   aItems.push(String({{id}}));
 </script>
@@ -64,7 +64,7 @@ function delete_personal_bill(bill_id)
   <div id="popup">  
     <ul id="item_ul" class="list-inline"></ul>  
   </div>
-   <input type="text" class="form-control" name="member_code" id="member_code" placeholder="输入会员手机号" required="required" onkeyup="findItems();"/>
+   <input type="text" class="form-control" name="member_phone" id="member_phone" placeholder="输入会员手机号" required="required" onkeyup="findItems();"/>
    <input type="text" class="form-control" name="price" placeholder="费用" required="required"/>
    <input type="text" class="form-control" name="bill_comment" placeholder="添加备注"/>
     <input type="hidden" name="bill_table" value="{{bill_table.id}}" />
