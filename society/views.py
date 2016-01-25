@@ -69,7 +69,6 @@ def update_balance(request):
                 return redirect("/member_detail/%s/?info=%s" % (data['member_id'], u"充值不成功")) 
     else:
         return HttpResponseRedirect('/login')
-
 """
 def add_multitems(request):
     if request.user.is_authenticated():
@@ -230,10 +229,7 @@ def download_bill(request, table_id):
     response['Content-Encoding'] = 'utf-8'
     response['Content-Disposition'] = 'attachment;filename=%s' % filename
     return response
-
-
 """
-
 
 def LoginView(request):
     if request.method == 'POST':
