@@ -48,14 +48,17 @@ def add_one_member(request):
         return HttpResponseRedirect('/login')
 
 def member_detail(request, member_id):
-	if request.user.is_authenticated():
-            content = {}
-            content['member'] = Member.objects.get(id=member_id)
-            content['pay_log'] = Personal_bill.objects.filter(member_id=member_id) or None
-            content['recharge_log'] = Recharge.objects.filter(member_id=member_id) or None
-            return render(request, 'member_detail.html', content)
-        else:
-            return HttpResponseRedirect('/login')
+    if request.user.is_authenticated():
+        content = {}
+        content['member'] = Member.objects.get(id=member_id)
+        print("here 1")
+        content['pay_log'] = Personal_bill.objects.filter(member_id=member_id)
+        print("here 2")
+        content['recharge_log'] = Recharge.objects.filter(member_id=member_id)
+        print(content)
+        return render(request, 'member_detail.html', content)
+    else:
+        return HttpResponseRedirect('/login')
 
 def update_balance(request):
     if request.user.is_authenticated(): 
@@ -92,9 +95,7 @@ def bill_table_index(request):
         #is it admin, if it is admin , he can see all the bill and use the filter
         #if not, the emploer only see the bill of himself and can not use the filter
         if not request.user.is_staff:
-             bill_tables = bill_tables.filter(comment__contains=request.user.first_name)
-        
-        comment = request.GET.get('comment', '')
+            comment = request.GET.get('comment', '')
         if comment != '':
             bill_tables = bill_tables.filter(comment__contains=comment)
             
@@ -263,4 +264,6 @@ def LoginView(request):
 
 def LogoutView(request):
     logout(request)
-    return redirect('/')
+ #-*- coding: utf-8 -*-
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
