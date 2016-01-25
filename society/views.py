@@ -51,28 +51,28 @@ def member_detail(request, member_id):
 	if request.user.is_authenticated():
             content = {}
             content['member'] = Member.objects.get(id=member_id)
-            content['pay_log'] = Personal_bill.objects.filter(member_id=member_id)
-            content['recharge_log'] = Recharge.objects.filter(member_id=member_id )
+            content['pay_log'] = Personal_bill.objects.filter(member_id=member_id) or None
+            content['recharge_log'] = Recharge.objects.filter(member_id=member_id) or None
             return render(request, 'member_detail.html', content)
         else:
             return HttpResponseRedirect('/login')
 
 def update_balance(request):
     if request.user.is_authenticated(): 
-            if request.method == 'POST':
-                data = request.POST
-                form = RechargeForm(data)
-            if form.is_valid():
-                form.save()
-                member = Member.objects.get(id=data['member_id'])
-                price = float(data['price'])
-                member.balance = member.balance + price
-                member.save()
-                return redirect("/member_detail/%s/?info=%s" % (data['member_id'], u"充值成功添加"))
-            else:
-                return redirect("/member_detail/%s/?info=%s" % (data['member_id'], u"充值不成功"))
+        if request.method == 'POST':
+            data = request.POST
+            form = RechargeForm(data)
+        if form.is_valid():
+            form.save()
+            member = Member.objects.get(id=data['member_id'])
+            price = float(data['price'])
+            member.balance = member.balance + price
+            member.save()
+            return redirect("/member_detail/%s/?info=%s" % (data['member_id'], u"充值成功添加"))
         else:
-           return HttpResponseRedirect('/login')
+            return redirect("/member_detail/%s/?info=%s" % (data['member_id'], u"充值不成功"))
+    else:
+        return HttpResponseRedirect('/login')
 
 """
 def add_multitems(request):
