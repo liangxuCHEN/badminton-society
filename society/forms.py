@@ -52,6 +52,8 @@ class PersonalBillForm(forms.ModelForm):
     def save(self): # create new bill
         if self.data['bill_comment'] == "":
             comment = u"活动费用"
+        else:
+            comment = self.data['bill_comment']
         new_table=Personal_bill.objects.create(
             member=Member.objects.get(phone=self.data['member_phone']),
             bill_table=Bill_table.objects.get(id=self.data['bill_table']),

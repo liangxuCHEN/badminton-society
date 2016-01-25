@@ -64,6 +64,10 @@ def update_balance(request):
                 form = RechargeForm(data)
             if form.is_valid():
                 form.save()
+                member = Member.objects.get(id=data['member_id'])
+                price = float(data['price'])
+                member.balance = member.balance + price
+                member.save()
                 return redirect("/member_detail/%s/?info=%s" % (data['member_id'], u"充值成功添加"))
             else:
                 return redirect("/member_detail/%s/?info=%s" % (data['member_id'], u"充值不成功"))

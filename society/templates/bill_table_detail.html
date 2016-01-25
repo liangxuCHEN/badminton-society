@@ -21,7 +21,7 @@ function delete_personal_bill(bill_id)
   aItems.push(String({{id}}));
 </script>
 {% endfor %}
-<div class="jumbotron" id="#error">
+<div class="jumbotron" id="error">
 {% if info %}
    <div class="alert alert-info" role="alert">
       <strong>{{ info }}</strong>
@@ -61,7 +61,7 @@ function delete_personal_bill(bill_id)
 <div class="pull-middle">
  <form role="form" action="{% url 'add_personal_bill' %}" method="post" class="form-inline" id="item_form">
 {% csrf_token %}
-  <div id="popup">  
+  <div id="popup">
     <ul id="item_ul" class="list-inline"></ul>  
   </div>
    <input type="text" class="form-control" name="member_phone" id="member_phone" placeholder="输入会员手机号" required="required" onkeyup="findItems();"/>
