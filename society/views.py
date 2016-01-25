@@ -28,7 +28,7 @@ def member_index(request):
         content = {}
         members = Member.objects.filter()
         content['member_list'] = members
-        return render(request, 'members.html', content)
+        return render(request, 'member.html', content)
     else:
         return HttpResponseRedirect('/login')
 
