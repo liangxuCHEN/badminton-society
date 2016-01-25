@@ -50,7 +50,7 @@ function delete_personal_bill(bill_id)
     </td>
     <td>{{bill.created_at}}</td>
     <td>{{bill.bill_comment}}</td>
-    <td><button onclick="delete_bill({{bill.id}})" class="btn btn-danger">删除</button></td>
+    <td><button onclick="delete_personal_bill({{bill.id}})" class="btn btn-danger">删除</button></td>
   	</tr>
   {% endfor %}
  </table>
