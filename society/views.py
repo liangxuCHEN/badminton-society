@@ -7,7 +7,8 @@ from django.http import HttpResponseRedirect, HttpResponse
 #from django.contrib.auth import authenticate, login, logout
 from society.models import Member, Personal_bill, Bill_table
 from django import forms
-from society.forms import MemberForm, BillTableForm,PersonalBillForm,AuthenticationForm
+from society.forms import MemberForm, AuthenticationForm
+#, BillTableForm,PersonalBillForm,
 from django.utils import timezone
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 
