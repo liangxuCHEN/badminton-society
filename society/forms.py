@@ -16,7 +16,7 @@ class MemberForm(forms.ModelForm):
             self._errors['phone'] = self.error_class(['this phone exists'])  
 
         return cleaned_data
-"""
+
 class BillTableForm(forms.ModelForm):
     class Meta:
         model = Bill_table
@@ -28,19 +28,19 @@ class BillTableForm(forms.ModelForm):
             comment=self.data['comment'],
         )
 
-class BillForm(forms.ModelForm):
+class PersonalBillForm(forms.ModelForm):
     class Meta:
-        model = Bill
+        model = Personal_bill
 
     def save(self): # create new bill
-        new_table=Bill.objects.create(
-            item_code=Item.objects.get(code=self.data['item_code']),
+        new_table=Personal_bill.objects.create(
+            member=Member.objects.get(phone=self.data['member_phone']),
             bill_table=Bill_table.objects.get(id=self.data['bill_table']),
             created_at=timezone.now(),
-            number=self.data['number'],
+            price=self.data['price'],
             bill_comment=self.data['bill_comment'],
         )
-"""        
+      
 class AuthenticationForm(forms.Form):
 
             username = forms.CharField(widget=forms.TextInput())

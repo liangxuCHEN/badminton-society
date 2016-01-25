@@ -12,6 +12,13 @@ urlpatterns = patterns('',
     url(r'^login$', views.LoginView, name='login'),
     url(r'^logout$', views.LogoutView, name='logout'),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^bill_table$',  views.bill_table_index, name='bill_table_index'),
+    url(r'^bill_table_create$',  views.add_bill_table, name='add_bill_table'),
+    url(r'^bill_table_detail/(?P<table_id>\d+)/$', views.bill_table_detail, name='bill_table_detail'),
+    url(r'^edit_bill_table/(?P<table_id>\d+)/$', views.edit_bill_table, name='edit_bill_table'),
+    url(r'^add_personal_bill', views.add_personal_bill, name='add_personal_bill'),
+    url(r'^delete_personal_bill/(?P<personal_bill_id>\d+)/(?P<table_id>\d+)/$',
+        views.delete_personal_bill, name='delete_personal_bill'),
 )
 
 """

@@ -3,12 +3,12 @@
 {% block title %}账单{% endblock %}
 <script type="text/javascript">
 aItems = new Array();
-function delete_bill(bill_id)
+function delete_personal_bill(bill_id)
   {
   var name=prompt("请输入您的名字","Liangxu");
   if (name!=null && name!="")
   {
-    self.location="/delete_bill/"+bill_id+"/{{bill_table.id}}";
+    self.location="/delete_personal_bill/"+bill_id+"/{{bill_table.id}}";
     document.getElementById(bill_id).hidden = true;
   }
 }
@@ -29,21 +29,21 @@ function delete_bill(bill_id)
 {% endif %}
 </div>
 <div class="jumbotron" id="table">
-{% if bill_list %}
+{% if personal_bill_list %}
  <table class="table table-hover">
    <thead>
-     <tr><td>名字</td><td>编码</td><td>数量</td><td>单价</td><td>合计</td><td>时间</td><td>备注</td><td>操作</td></tr>
+     <tr><td>名字</td><td>手机</td><td>收费</td><td>余额</td><td>合计</td><td>时间</td><td>备注</td><td>操作</td></tr>
    </thead>
    <tbody>
-  {% for bill in bill_list %}
+  {% for bill in personal_bill_list %}
   	<tr id="{{bill.id}}">
-  	<td>{{ bill.item_code.name}}</td>
-    <td>{{ bill.item_code.code}}</td>
-  	<td>{{bill.number}}</td>
-    <td>{{ bill.item_code.price}}</td>
+  	<td>{{ bill.member.name}}</td>
+    <td>{{ bill.member.phone}}</td>
+  	<td>{{bill.price}}</td>
+    <td>{{ bill.member.balance}}</td>
     <td>
     <script type="text/javascript">
-      price = {{ bill.number}} * {{ bill.item_code.price}};
+      price = {{ bill.price}};
       var num = new Number(price);
       document.write(num.toFixed(2));
     </script>
@@ -59,13 +59,13 @@ function delete_bill(bill_id)
  <h5>(如果删除了产品，请刷新页面)</h5></p>
 
 <div class="pull-middle">
- <form role="form" action="{% url 'add_bill' %}" method="post" class="form-inline" id="item_form">
+ <form role="form" action="{% url 'add_personal_bill' %}" method="post" class="form-inline" id="item_form">
 {% csrf_token %}
   <div id="popup">  
     <ul id="item_ul" class="list-inline"></ul>  
   </div>
-   <input type="number" class="form-control" name="item_code" id="item_code" placeholder="添加产品编码" required="required" onkeyup="findItems();"/>
-   <input type="number" class="form-control" name="number" placeholder="产品数量" required="required"/>
+   <input type="text" class="form-control" name="member_code" id="member_code" placeholder="输入会员手机号" required="required" onkeyup="findItems();"/>
+   <input type="text" class="form-control" name="price" placeholder="费用" required="required"/>
    <input type="text" class="form-control" name="bill_comment" placeholder="添加备注"/>
     <input type="hidden" name="bill_table" value="{{bill_table.id}}" />
     <input type="submit" value="添加" class="btn btn-primary"/>
@@ -96,7 +96,7 @@ function delete_bill(bill_id)
 </div>
 </form>
 <hr>
-<form role="form" action="{% url 'download_bill' bill_table.id %}" method="get" class="form-inline"><label>下载账单请点击这里： </label><input type="submit" value="下载" class="btn btn-primary"/></form>
+<!--<form role="form" action="#" method="get" class="form-inline"><label>下载账单请点击这里： </label><input type="submit" value="下载" class="btn btn-primary"/></form>-->
 </div>
 {% endblock %}
 

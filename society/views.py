@@ -7,8 +7,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 #from django.contrib.auth import authenticate, login, logout
 from society.models import Member, Personal_bill, Bill_table
 from django import forms
-from society.forms import MemberForm, AuthenticationForm
-#, BillTableForm,PersonalBillForm,
+from society.forms import MemberForm, AuthenticationForm, BillTableForm,PersonalBillForm,
 from django.utils import timezone
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 
@@ -57,7 +56,7 @@ def add_multitems(request):
             return render(request, 'multitem_create.html')
     else:
         return HttpResponseRedirect('/login')
-
+"""
 def bill_table_index(request):
     if request.user.is_authenticated():
         content = {}
@@ -138,15 +137,15 @@ def bill_table_detail(request, table_id):
         content = {}
         if 'info' in request.GET:
             content['info'] = request.GET['info']
-        items = Item.objects.all()
-        code = []
-        for item in items:
-            code.append(item.code)
-        content["code"] =code
-        content['bill_list'] = Bill.objects.filter(bill_table_id=table_id)
+        members = Member.objects.all()
+        phone = []
+        for member in members:
+            phone.append(member.phone)
+        content["phone"] =phone
+        content['personal_bill_list'] = Personal_bill.objects.filter(bill_table_id=table_id)
         total_price = 0
-        for bill in content['bill_list']:
-            total_price += bill.number * bill.item_code.price
+        for personal_bill in content['personal_bill_list']:
+            total_price += personal_bill.price
         
         bill_table = Bill_table.objects.get(id=table_id)
         bill_table.total_price = total_price
@@ -157,30 +156,30 @@ def bill_table_detail(request, table_id):
         return HttpResponseRedirect('/login')
     
 
-def add_bill(request):
+def add_personal_bill(request):
     if request.user.is_authenticated():
         if request.method == 'POST':
             data = request.POST
-            if Item.objects.filter(code=data['item_code']):
-                form = BillForm(data)
+            if Member.objects.filter(code=data['member_phone']):
+                form = PersonalBillForm(data)
                 form.save()
                 return redirect("/bill_table_detail/%s/?info=%s" % (data['bill_table'], u"成功添加"))
             else:
-                return redirect(u"/bill_table_detail/%s/?info=%s" % (data['bill_table'], data['item_code']+u" 不存在"))
+                return redirect(u"/bill_table_detail/%s/?info=%s" % (data['bill_table'], data['member_phone']+u" 不存在"))
         else:
             return redirect("/bill_table_detail/%s" % (data['bill_table']))
     else:
         return HttpResponseRedirect('/login')
 
-def delete_bill(request, bill_id, table_id):
+def delete_personal_bill(request, personal_bill_id, table_id):
     if request.user.is_authenticated():
-        bill = Bill.objects.get(id=bill_id)
+        bill = Personal_bill.objects.get(id=personal_bill_id)
         bill.delete()
         return redirect("/bill_table_detail/"+table_id)
     else:
         return HttpResponseRedirect('/login')
     
-
+"""
 def download_bill(request, table_id):
     bills = Bill.objects.filter(bill_table_id=table_id)
     data = {}
@@ -209,7 +208,7 @@ def download_bill(request, table_id):
 
 
 
-"""
+
 
 def LoginView(request):
     if request.method == 'POST':
