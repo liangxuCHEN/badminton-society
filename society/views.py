@@ -207,6 +207,10 @@ def download_bill(request, table_id):
     response['Content-Disposition'] = 'attachment;filename=%s' % filename
     return response
 
+
+
+"""
+
 def LoginView(request):
     if request.method == 'POST':
         form = AuthenticationForm(data=request.POST)
@@ -230,5 +234,3 @@ def LoginView(request):
 def LogoutView(request):
     logout(request)
     return redirect('/')
-
-"""
