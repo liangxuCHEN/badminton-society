@@ -37,7 +37,7 @@ function delete_personal_bill(bill_id)
    <tbody>
   {% for bill in personal_bill_list %}
   	<tr id="{{bill.id}}">
-  	<td>{{ bill.member.name}}</td>
+  	<td><a href="{% url 'member_detail' bill.member.id %}" class="btn btn-primary">{{ bill.member.name}}</a></td>
     <td>{{ bill.member.phone}}</td>
   	<td>{{bill.price}}</td>
     <td>{{ bill.member.balance}}</td>

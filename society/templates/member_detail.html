@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}会员列表{% endblock %}
+{% block content %}
+<div class="jumbotron" id="member">
+<p>
+名字: {{member.name}} <br />
+电话: {{member.phone}} <br />
+余额: {{member.balance}}
+</p>
+{% if recharge_log %}
+ <table class="table">
+   <thead>
+     <tr><td>充值记录</td><td>日期</td><td>金额</td><td>备注</td></tr>
+   </thead>
+   <tbody>
+  {% for item in recharge_log %}
+  	<tr>
+  	<td>{{item.id}}</td>
+  	<td>{{item.created_at}}</td>
+  	<td>{{item.price}}</td>
+  	<td>{{item.comment}}</td>
+  	</tr>
+  {% endfor %}
+ </tbody>
+ </table>
+ {% endif %}
+ 
+ {% if pay_log %}
+ <table class="table">
+   <thead>
+     <tr><td>消费记录</td><td>日期</td><td>金额</td><td>备注</td><td>详细</td></tr>
+   </thead>
+   <tbody>
+  {% for item in pay_log %}
+  	<tr>
+  	<td>{{item.id}}</td>
+  	<td>{{item.created_at}}</td>
+  	<td>{{item.price}}</td>
+  	<td>{{item.bill_comment}}</td>
+  	<td>{{item.bill_table.id}}</td>
+  	</tr>
+  {% endfor %}
+ </tbody>
+ </table>
+ {% endif %}
+ </div>
+ <hr>
+ <a href="{% url 'add_one_member' %}" class="btn btn-primary">添加会员</a>   
+ 
+{% endblock %}

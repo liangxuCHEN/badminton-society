@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 #from django.contrib.auth import authenticate, login, logout
 from society.models import Member, Personal_bill, Bill_table
 from django import forms
-from society.forms import MemberForm, AuthenticationForm, BillTableForm,PersonalBillForm
+from society.forms import MemberForm, RechargeForm, AuthenticationForm, BillTableForm,PersonalBillForm
 from django.utils import timezone
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 
@@ -46,6 +46,30 @@ def add_one_member(request):
             return render(request, 'member_create.html', { "form" : form })
     else:
         return HttpResponseRedirect('/login')
+
+def member_detail(request, member_id):
+	if request.user.is_authenticated():
+		content = {}
+		content['member'] = Member.objects.get(id=member_id)
+		content['pay_log'] = Personal_bill.objects.filter(member_id=member_id)
+		content['recharge_log'] = Recharge.objects.filter(member_id=member_id )
+		return render(request, 'member_detail.html', content)
+	else:
+        return HttpResponseRedirect('/login')
+
+def update_balance(request):
+	if request.user.is_authenticated(): 
+		if request.method == 'POST':
+            data = request.POST
+            form = RechargeForm(data)
+            if form.is_valid():
+            	form.save()
+            	return redirect("/member_detail/%s/?info=%s" % (data['member_id'], u"充值成功添加"))
+		else:
+			return HttpResponseRedirect('/member')
+	else:
+        return HttpResponseRedirect('/login')
+
 """
 def add_multitems(request):
     if request.user.is_authenticated():

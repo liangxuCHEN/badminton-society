@@ -1,6 +1,6 @@
  #-*- coding: utf-8 -*-
 from django import forms
-from society.models import Member, Personal_bill, Bill_table
+from society.models import Member, Personal_bill, Bill_table, Recharge
 from django.utils import timezone
 
 class MemberForm(forms.ModelForm):
@@ -16,6 +16,22 @@ class MemberForm(forms.ModelForm):
             self._errors['phone'] = self.error_class(['this phone exists'])  
 
         return cleaned_data
+
+class RechargeForm(forms.ModelForm):
+    class Meta:
+        model = Recharge
+
+    def save(self):
+        member = Member.objects.get(id=self.data['member_id'])
+        member.balance = member.balance + price
+        member.save()
+        new_recharge = Recharge.objects.create(
+            member=member,
+            created_at=timezone.now(),
+            price=self.data['price'],
+            comment=self.data['charge_comment'],
+        )
+
 
 class BillTableForm(forms.ModelForm):
     class Meta:
