@@ -1,13 +1,18 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.views.generic import TemplateView
-from store import views
+from society import views
 
 urlpatterns = patterns('',
     # Examples:
     url(r'^$', views.home_page, name='home_page'),
     # url(r'^blog/', include('blog.urls')),
-    url(r'^item$',  views.item_index, name='item_index'),
+    url(r'^member$',  views.member_index, name='member_index'),
+    url(r'^member_creat$',  views.add_one_member, name='add_one_member'),
+)
+
+"""
+url(r'^item$',  views.item_index, name='item_index'),
     url(r'^item_creat$',  views.add_one_item, name='add_one_item'),
     url(r'^multitem_creat$',  views.add_multitems, name='add_multitems'),
     url(r'^bill_table$',  views.bill_table_index, name='bill_table_index'),
@@ -20,4 +25,4 @@ urlpatterns = patterns('',
     url(r'^login$', views.LoginView, name='login'),
     url(r'^logout$', views.LogoutView, name='logout'),
     url(r'^admin/', include(admin.site.urls)),
-)
+"""

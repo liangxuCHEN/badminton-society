@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}新建产品{% endblock %}
+{% block content %}
+<div class="jumbotron" id="#error">
+{% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %}
+            <div class="alert alert-error">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in form.non_field_errors %}
+        <div class="alert alert-error">
+            <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
+</div>
+
+
+<form role="form" action="{% url 'add_one_item' %}" method="post">
+{% csrf_token %}
+<div class="form-group">
+      <label class="col-sm-2 control-label">编码</label>
+      <div class="col-sm-10">
+         <input type="text" class="form-control" name="code" placeholder="请输入产品编码" />
+      </div>
+</div>
+<div class="form-group">
+      <label  class="col-sm-2 control-label">名字</label>
+      <div class="col-sm-10">
+         <input type="text" class="form-control" name="name" placeholder="请输入产品名字">
+      </div>
+</div>
+<div class="form-group">
+      <label  class="col-sm-2 control-label">价格</label>
+      <div class="col-sm-10">
+         <input type="text" class="form-control" name="price" placeholder="请输入产品价格">
+      </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <input type="submit" value="valide" class="btn btn-primary"/>
+    </div>
+</div>
+</form>
+{% endblock %}

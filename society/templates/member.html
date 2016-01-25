@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}会员列表{% endblock %}
+{% block content %}
+<div class="jumbotron" id="member">
+{% if member_list %}
+ <table class="table">
+   <thead>
+     <tr><td>#</td><td>电话</td><td>名字</td><td>余额</td></tr>
+   </thead>
+   <tbody>
+  {% for member in member_list %}
+  	<tr>
+  	<td>{{member.id}}</td>
+  	<td>{{member.phone}}</td>
+  	<td>{{member.name}}</td>
+  	<td>{{member.balance}}</td>
+  	</tr>
+  {% endfor %}
+ </tbody>
+ </table>
+ {% endif %}
+ 
+ </div>
+ <hr>
+ <a href="{% url 'add_one_member' %}" class="btn btn-primary">添加会员</a>   
+ <!--<a href="{% url 'add_multmembers' %}" class="btn btn-primary">创建多个产品</a>-->
+{% endblock %}
