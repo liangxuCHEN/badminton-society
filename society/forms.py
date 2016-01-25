@@ -49,12 +49,14 @@ class PersonalBillForm(forms.ModelForm):
         model = Personal_bill
 
     def save(self): # create new bill
+        if self.data['bill_comment'] == "":
+            comment = u"活动费用"
         new_table=Personal_bill.objects.create(
             member=Member.objects.get(phone=self.data['member_phone']),
             bill_table=Bill_table.objects.get(id=self.data['bill_table']),
             created_at=timezone.now(),
             price=self.data['price'],
-            bill_comment=self.data['bill_comment'],
+            bill_comment=comment,
         )
       
 class AuthenticationForm(forms.Form):

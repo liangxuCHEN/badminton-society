@@ -5,7 +5,23 @@
 <p>
 名字: {{member.name}} <br />
 电话: {{member.phone}} <br />
-余额: {{member.balance}}
+余额: {{member.balance}} <br />
+<hr>
+<form role="form" action="{% url 'update_balance'%}" method="post" class="form-inline" >
+{% csrf_token %}
+<input type="hidden" name="member_id" value="{{member.id}}" />
+<div class="form-group">
+    <label>账单备注: </label>
+    <input type="text" class="form-control" name="comment" value="充值" />
+</div>
+<div class="form-group">
+   <label>充值金额: </label>
+   <input type="text" class="form-control" name="price"/> 
+</div> 
+<div class="form-group">
+    <input type="submit" value="提交" class="btn btn-primary"/>
+</div>
+</form>
 </p>
 {% if recharge_log %}
  <table class="table">
@@ -44,7 +60,6 @@
  </table>
  {% endif %}
  </div>
- <hr>
- <a href="{% url 'add_one_member' %}" class="btn btn-primary">添加会员</a>   
+ 
  
 {% endblock %}
