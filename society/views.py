@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect,render_to_response,RequestContext
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 #from django.contrib.auth import authenticate, login, logout
-from society.models import Member, Personal_bill, Bill_table
+from society.models import Member, Personal_bill, Bill_table,Recharge
 from django import forms
 from society.forms import MemberForm, RechargeForm, AuthenticationForm, BillTableForm,PersonalBillForm
 from django.utils import timezone
@@ -49,26 +49,26 @@ def add_one_member(request):
 
 def member_detail(request, member_id):
 	if request.user.is_authenticated():
-		content = {}
-		content['member'] = Member.objects.get(id=member_id)
-		content['pay_log'] = Personal_bill.objects.filter(member_id=member_id)
-		content['recharge_log'] = Recharge.objects.filter(member_id=member_id )
-		return render(request, 'member_detail.html', content)
-	else:
-        return HttpResponseRedirect('/login')
+            content = {}
+            content['member'] = Member.objects.get(id=member_id)
+            content['pay_log'] = Personal_bill.objects.filter(member_id=member_id)
+            content['recharge_log'] = Recharge.objects.filter(member_id=member_id )
+            return render(request, 'member_detail.html', content)
+        else:
+            return HttpResponseRedirect('/login')
 
 def update_balance(request):
 	if request.user.is_authenticated(): 
-		if request.method == 'POST':
-            data = request.POST
-            form = RechargeForm(data)
+            if request.method == 'POST':
+                data = request.POST
+                form = RechargeForm(data)
             if form.is_valid():
-            	form.save()
-            	return redirect("/member_detail/%s/?info=%s" % (data['member_id'], u"充值成功添加"))
-		else:
-			return HttpResponseRedirect('/member')
-	else:
-        return HttpResponseRedirect('/login')
+                form.save()
+                return redirect("/member_detail/%s/?info=%s" % (data['member_id'], u"充值成功添加"))
+            else:
+                return HttpResponseRedirect('/member')
+        else:
+           return HttpResponseRedirect('/login')
 
 """
 def add_multitems(request):

@@ -10,9 +10,9 @@ class Member(models.Model):
     balance = models.FloatField()
 
 class Recharge(models.Model):
-	member = models.ForeignKey(Member)
-	comment = models.CharField(max_length=200, null=True)
-	price = models.FloatField()
+    member = models.ForeignKey(Member)
+    comment = models.CharField(max_length=200, null=True)
+    price = models.FloatField()
     created_at = models.DateTimeField()
 
 class Bill_table(models.Model):
