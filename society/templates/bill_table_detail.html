@@ -91,7 +91,7 @@ function delete_personal_bill(bill_id)
 </form>
 {% endif %}
 <hr>
-<!--<form role="form" action="#" method="get" class="form-inline"><label>下载账单请点击这里： </label><input type="submit" value="下载" class="btn btn-primary"/></form>-->
+<form role="form" action="{% url 'download_bill' bill_table.id %}" method="get" class="form-inline"><label>下载账单请点击这里： </label><input type="submit" value="下载" class="btn btn-primary"/></form>
 </div>
 {% endblock %}
 
