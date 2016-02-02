@@ -204,20 +204,18 @@ def delete_personal_bill(request, personal_bill_id, table_id):
     else:
         return HttpResponseRedirect('/login')
     
-"""
 def download_bill(request, table_id):
-    bills = Bill.objects.filter(bill_table_id=table_id)
+    bills = Personal_bill.objects.filter(bill_table_id=table_id)
     data = {}
     for bill in bills:
         line = {}
         line[str(bill.id)] = {
             'id': bill.id,
-            'name': bill.item_code.name,
-            'code': bill.item_code.code,
-            'number': bill.number,
-            'price': bill.item_code.price,
-            'total_price': bill.number * bill.item_code.price,
-            'comment': bill.bill_comment,
+            'name': bill.member.name,
+            'phone': bill.member.phone,
+            'price': bill.price,
+            'balance': bill.member.balance,
+            'bill_comment': bill.bill_comment,
         }
         data.update(line)
     
@@ -230,7 +228,6 @@ def download_bill(request, table_id):
     response['Content-Encoding'] = 'utf-8'
     response['Content-Disposition'] = 'attachment;filename=%s' % filename
     return response
-"""
 
 def LoginView(request):
     if request.method == 'POST':

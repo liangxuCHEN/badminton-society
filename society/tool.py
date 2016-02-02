@@ -21,26 +21,24 @@ def save_mul_item(text):
 
 def create_xls(data):
     work = Workbook(encoding='utf-8')
-    work_sheet = work.add_sheet(u'账单')
+    work_sheet = work.add_sheet(u'活动账单')
     #head of table    
     work_sheet.write(0, 0, 'ID')
     work_sheet.write(0, 1, u'名字')
-    work_sheet.write(0, 2, u'编码')
-    work_sheet.write(0, 3, u'数量')
-    work_sheet.write(0, 4, u'单价')
-    work_sheet.write(0, 5, u'合计')
-    work_sheet.write(0, 6, u'备注')
+    work_sheet.write(0, 2, u'手机')
+    work_sheet.write(0, 3, u'费用')
+    work_sheet.write(0, 4, u'余额')
+    work_sheet.write(0, 5, u'备注')
     i = 1
     total_price = 0
     for row in data:
         work_sheet.write(i, 0, str(i))
         work_sheet.write(i, 1, data[row]['name'])
-        work_sheet.write(i, 2, data[row]['code'])
-        work_sheet.write(i, 3, data[row]['number'])
-        work_sheet.write(i, 4, data[row]['price'])
-        work_sheet.write(i, 5, data[row]['total_price'])
-        work_sheet.write(i, 6, data[row]['comment'])
-        total_price += data[row]['number'] * data[row]['price']
+        work_sheet.write(i, 2, data[row]['phone'])
+        work_sheet.write(i, 3, data[row]['price'])
+        work_sheet.write(i, 4, data[row]['balance'])
+        work_sheet.write(i, 5, data[row]['bill_comment'])
+        total_price += data[row]['price']
         i = i + 1
     work_sheet.write(i, 4, u'总价:')
     work_sheet.write(i, 5, total_price)
