@@ -154,28 +154,29 @@ def edit_bill_table(request, table_id):
         return HttpResponseRedirect('/login')
 
 def bill_table_detail(request, table_id):
+    content = {}
     if request.user.is_authenticated():
-        content = {}
-        if 'info' in request.GET:
-            content['info'] = request.GET['info']
-        members = Member.objects.all()
-        phone = []
-        for member in members:
-            phone.append(member.phone)
-        content["phone"] =phone
-        content['personal_bill_list'] = Personal_bill.objects.filter(bill_table_id=table_id)
-        total_price = 0
-        for personal_bill in content['personal_bill_list']:
-            total_price += personal_bill.price
-        
-        bill_table = Bill_table.objects.get(id=table_id)
-        bill_table.total_price = total_price
-        bill_table.save()
-        content['bill_table'] = bill_table
-        return render(request, 'bill_table_detail.html', content)
+        content['power'] = "admin"
     else:
-        return HttpResponseRedirect('/login')
+        content['power'] = "anyone"
+    if 'info' in request.GET:
+        content['info'] = request.GET['info']
+    members = Member.objects.all()
+    phone = []
+    for member in members:
+        phone.append(member.phone)
+    content["phone"] =phone
+    content['personal_bill_list'] = Personal_bill.objects.filter(bill_table_id=table_id)
+    total_price = 0
+    for personal_bill in content['personal_bill_list']:
+        total_price += personal_bill.price
     
+    bill_table = Bill_table.objects.get(id=table_id)
+    bill_table.total_price = total_price
+    bill_table.save()
+    content['bill_table'] = bill_table
+    return render(request, 'bill_table_detail.html', content)
+ 
 
 def add_personal_bill(request):
     if request.user.is_authenticated():
