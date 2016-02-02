@@ -60,7 +60,7 @@
   	<td>{{item.created_at}}</td>
   	<td>{{item.price}}</td>
   	<td>{{item.bill_comment}}</td>
-  	<td><a href="{{ '/bill_table_detail/'+item.bill_table.id}}">更多</a></td>
+  	<td><a href="/bill_table_detail/{{item.bill_table.id}}">更多</a></td>
   	</tr>
   {% endfor %}
  </tbody>
