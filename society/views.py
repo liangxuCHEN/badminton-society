@@ -219,7 +219,7 @@ def download_bill(request, table_id):
         }
         data.update(line)
     
-    filename = store.tool.create_xls(data)
+    filename = society.tool.create_xls(data)
     f = open(filename)
     file_data = f.read()
     f.close()
