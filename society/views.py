@@ -200,6 +200,9 @@ def delete_personal_bill(request, personal_bill_id, table_id):
     if request.user.is_authenticated():
         bill = Personal_bill.objects.get(id=personal_bill_id)
         bill.delete()
+        member = Member.objects.get(id=bill.member.id)
+        member.balance = member.balance + int(bill.price)
+        member.save()
         return redirect("/bill_table_detail/"+table_id)
     else:
         return HttpResponseRedirect('/login')
