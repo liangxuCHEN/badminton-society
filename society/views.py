@@ -26,7 +26,19 @@ def member_index(request):
     if request.user.is_authenticated():
         content = {}
         members = Member.objects.filter()
-        content['member_list'] = members
+        page_size =  10
+        paginator = Paginator(members, page_size)
+        try:
+            page = int(request.GET.get('page','1'))
+        except ValueError:
+            page = 1
+
+        try:
+            member_page = paginator.page(page)
+        except (EmptyPage, InvalidPage):
+            member_page = paginator.page(paginator.num_pages)
+
+        content['member_list'] = member_page
         return render(request, 'member.html', content)
     else:
         return HttpResponseRedirect('/login')
