@@ -32,15 +32,21 @@ function delete_personal_bill(bill_id)
 {% if personal_bill_list %}
  <table class="table table-hover">
    <thead>
-     <tr><td>名字</td><td>手机</td><td>收费</td><td>余额</td><td>备注</td>
-      {% if power == "admin" %}<td>操作</td>{% endif %}
+     <tr>
+      {% if power == "admin" %}
+      <td>名字</td> <td>手机</td><td>收费</td><td>余额</td><td>备注</td><td>操作</td>
+      {% else %}
+      <td>名字</td><td>收费</td><td>余额</td><td>备注</td>
+      {% endif %}
      </tr>
    </thead>
    <tbody>
   {% for bill in personal_bill_list %}
   	<tr id="{{bill.id}}">
   	<td><a href="{% url 'member_detail' bill.member.id %}" class="btn btn-primary">{{ bill.member.name}}</a></td>
+    {% if power == "admin" %}
     <td>{{ bill.member.phone}}</td>
+    {% endif %}
   	<td>{{bill.price}}</td>
     <td>{{ bill.member.balance}}</td>
     <td>{{bill.bill_comment}}</td>
@@ -49,9 +55,9 @@ function delete_personal_bill(bill_id)
   {% endfor %}
  </table>
  {% endif %}
- <p class="bg-info">总价 : {{ bill_table.total_price }}</p>
 
 {% if power == "admin" %}
+ <p class="bg-info">总价 : {{ bill_table.total_price }}</p>
 <div class="pull-middle">
  <form role="form" action="{% url 'add_personal_bill' %}" method="post" class="form-inline" id="item_form">
 {% csrf_token %}
@@ -89,10 +95,11 @@ function delete_personal_bill(bill_id)
     <input type="submit" value="提交" class="btn btn-primary"/>
 </div>
 </form>
-{% endif %}
+
 <hr>
 <form role="form" action="{% url 'download_bill' bill_table.id %}" method="get" class="form-inline"><label>下载账单请点击这里： </label><input type="submit" value="下载" class="btn btn-primary"/></form>
 </div>
+{% endif %}
 {% endblock %}
 
 {% block script %}

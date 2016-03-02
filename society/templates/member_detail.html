@@ -14,6 +14,7 @@
 电话: {{member.phone}} <br />
 余额: {{member.balance}} <br />
 <hr>
+{% if  power == "admin" %}
 <form role="form" action="{% url 'update_balance'%}" method="post" class="form-inline" >
 {% csrf_token %}
 <input type="hidden" name="member_id" value="{{member.id}}" />
@@ -29,6 +30,7 @@
     <input type="submit" value="提交" class="btn btn-primary"/>
 </div>
 </form>
+{% endif %}
 </p>
 {% if recharge_log %}
  <table class="table">
@@ -51,7 +53,8 @@
  {% if pay_log %}
  <table class="table">
    <thead>
-     <tr><td>消费记录</td><td>日期</td><td>金额</td><td>备注</td><td>详细</td></tr>
+     <tr><td>消费记录</td><td>日期</td><td>金额</td><td>备注</td>
+     {% if  power == "admin" %}<td>详细</td>{% endif %}</tr>
    </thead>
    <tbody>
   {% for item in pay_log %}
@@ -60,7 +63,9 @@
   	<td>{{item.created_at}}</td>
   	<td>{{item.price}}</td>
   	<td>{{item.bill_comment}}</td>
+    {% if  power == "admin" %}
   	<td><a href="/bill_table_detail/{{item.bill_table.id}}">更多</a></td>
+    {% endif %}
   	</tr>
   {% endfor %}
  </tbody>

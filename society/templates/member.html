@@ -12,6 +12,15 @@
 {% if member_list %}
  <table class="table">
    <thead>
+   <form role="from" method="get" class="form-horizontal" action="/member"  >
+     <tr>
+      <td>#</td>
+      <td><input type="submit" value="搜索" class="btn btn-primary"/></td>
+       <td><input type='text' name="phone" placeholder="电话" class="form-control"  /></td>
+        <td><input type='text' name="name" placeholder="名字" class="form-control"  /></td>
+       <td>#</td>
+      </tr>
+    </form>
      <tr><td>#</td><td>电话</td><td>名字</td><td>余额</td><td>操作</td></tr>
    </thead>
    <tbody>
@@ -27,9 +36,28 @@
  </tbody>
  </table>
  {% endif %}
- 
- </div>
+ <div class="pull-left">
+      <ul class="pagination">
+            {% if member_list.has_previous %}
+                <li><a href="?page={{ member_list.previous_page_number }}">prev</a></li>
+            {% endif %}
+            <script type="text/javascript">
+            for (var i=1;i<={{ member_list.paginator.num_pages }};i++)
+            {
+             if (i == {{ member_list.number }}) {
+                document.write("<li class='active'> <a href='?page=" + i + "'>" + i + "</a></li>");
+             } else {
+              document.write("<li> <a href='?page=" + i + "'>" + i + "</a></li>");
+             }
+            }
+            </script>
+            {% if member_list.has_next %}
+               <li> <a href="?page={{ member_list.next_page_number }}">next</a></li>
+            {% endif %}
+      </ul>
+  </div>
+</div>
  <hr>
- <a href="{% url 'add_one_member' %}" class="btn btn-primary">添加会员</a>   
+ <a href="{% url 'add_one_member' %}" class="btn btn-info">添加会员</a>
  
 {% endblock %}

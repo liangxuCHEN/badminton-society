@@ -25,8 +25,30 @@ def home_page(request):
 def member_index(request):
     if request.user.is_authenticated():
         content = {}
-        members = Member.objects.filter()
-        content['member_list'] = members
+        
+        members = Member.objects.all()
+        if  request.GET != {}:
+            name = request.GET.get('name', '')
+            phone = request.GET.get("phone", "")
+            if name != '':
+                members = members.filter(name__contains=name)
+            if phone !="":
+                members = members.filter(phone=phone)
+
+        page_size = 8
+        paginator = Paginator(members, page_size)
+        
+        try:
+            page = int(request.GET.get('page','1'))
+        except ValueError:
+            page = 1
+
+        try:
+            member_page = paginator.page(page)
+        except (EmptyPage, InvalidPage):
+            member_page = paginator.page(paginator.num_pages)
+
+        content['member_list'] = member_page
         return render(request, 'member.html', content)
     else:
         return HttpResponseRedirect('/login')
@@ -48,14 +70,17 @@ def add_one_member(request):
         return HttpResponseRedirect('/login')
 
 def member_detail(request, member_id):
+    content = {}
     if request.user.is_authenticated():
-        content = {}
-        content['member'] = Member.objects.get(id=member_id)
-        content['pay_log'] = Personal_bill.objects.filter(member_id=member_id)
-        content['recharge_log'] = Recharge.objects.filter(member_id=member_id)
-        return render(request, 'member_detail.html', content)
-    else:
-        return HttpResponseRedirect('/login')
+        if request.user.is_authenticated():
+            content['power'] = "admin"
+        else:
+            content['power'] = "anyone"
+
+    content['member'] = Member.objects.get(id=member_id)
+    content['pay_log'] = Personal_bill.objects.filter(member_id=member_id)
+    content['recharge_log'] = Recharge.objects.filter(member_id=member_id)
+    return render(request, 'member_detail.html', content)
 
 def update_balance(request):
     if request.user.is_authenticated(): 
@@ -90,18 +115,17 @@ def bill_table_index(request):
             comment = request.GET.get('comment', '')
             if comment != '':
                 bill_tables = bill_tables.filter(comment__contains=comment)
-            
+
         has_pay = request.GET.get('has_pay','')
         if has_pay == "pay":
             bill_tables = bill_tables.filter(is_pay=True)
         if has_pay == "no_pay":
             bill_tables = bill_tables.filter(is_pay=False)
-        
+
         order_date = request.GET.get('order_date','down')
         if order_date == "down":
             bill_tables = bill_tables.order_by("-created_at")
 
-        
         #pages
         content['name'] = request.user.first_name
         page_size =  10
@@ -110,7 +134,7 @@ def bill_table_index(request):
             page = int(request.GET.get('page','1'))
         except ValueError:
             page = 1
-        
+
         try:
             bill_table_page = paginator.page(page)
         except (EmptyPage, InvalidPage):
@@ -132,7 +156,7 @@ def add_bill_table(request):
             return HttpResponseRedirect('bill_table')
     else:
         return HttpResponseRedirect('/login')
-    
+
 def edit_bill_table(request, table_id):
     if request.user.is_authenticated():
         if request.method == 'POST':
@@ -170,13 +194,13 @@ def bill_table_detail(request, table_id):
     total_price = 0
     for personal_bill in content['personal_bill_list']:
         total_price += personal_bill.price
-    
+
     bill_table = Bill_table.objects.get(id=table_id)
     bill_table.total_price = total_price
     bill_table.save()
     content['bill_table'] = bill_table
     return render(request, 'bill_table_detail.html', content)
- 
+
 
 def add_personal_bill(request):
     if request.user.is_authenticated():
@@ -206,7 +230,7 @@ def delete_personal_bill(request, personal_bill_id, table_id):
         return redirect("/bill_table_detail/"+table_id)
     else:
         return HttpResponseRedirect('/login')
-    
+
 def download_bill(request, table_id):
     bills = Personal_bill.objects.filter(bill_table_id=table_id)
     data = {}
@@ -221,7 +245,7 @@ def download_bill(request, table_id):
             'bill_comment': bill.bill_comment,
         }
         data.update(line)
-    
+
     filename = society.tool.create_xls(data)
     f = open(filename)
     file_data = f.read()
