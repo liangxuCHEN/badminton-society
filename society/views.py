@@ -14,6 +14,8 @@ from django.core.paginator import Paginator, InvalidPage, EmptyPage
 import society.tool
 import os
 
+# specail member shi shan manager, member id is 25
+SHI_SHAN = '25'
 
 # Create your views here.
 def home_page(request):
@@ -23,35 +25,35 @@ def home_page(request):
         return HttpResponseRedirect('/login')
 
 def member_index(request):
+    content = {}
     if request.user.is_authenticated():
-        content = {}
-        
         members = Member.objects.all()
-        if  request.GET != {}:
-            name = request.GET.get('name', '')
-            phone = request.GET.get("phone", "")
-            if name != '':
-                members = members.filter(name__contains=name)
-            if phone !="":
-                members = members.filter(phone=phone)
-
-        page_size = 8
-        paginator = Paginator(members, page_size)
-        
-        try:
-            page = int(request.GET.get('page','1'))
-        except ValueError:
-            page = 1
-
-        try:
-            member_page = paginator.page(page)
-        except (EmptyPage, InvalidPage):
-            member_page = paginator.page(paginator.num_pages)
-
-        content['member_list'] = member_page
-        return render(request, 'member.html', content)
     else:
-        return HttpResponseRedirect('/login')
+        members = Member.objects.exclude(id=25)
+    if  request.GET != {}:
+        name = request.GET.get('name', '')
+        phone = request.GET.get("phone", "")
+        if name != '':
+            members = members.filter(name__contains=name)
+        if phone !="":
+            members = members.filter(phone=phone)
+
+    page_size = 8
+    paginator = Paginator(members, page_size)
+    
+    try:
+        page = int(request.GET.get('page','1'))
+    except ValueError:
+        page = 1
+
+    try:
+        member_page = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+        member_page = paginator.page(paginator.num_pages)
+
+    content['member_list'] = member_page
+    return render(request, 'member.html', content)
+
 
 def add_one_member(request):
     if request.user.is_authenticated():
@@ -72,10 +74,11 @@ def add_one_member(request):
 def member_detail(request, member_id):
     content = {}
     if request.user.is_authenticated():
-        if request.user.is_authenticated():
-            content['power'] = "admin"
-        else:
-            content['power'] = "anyone"
+        content['power'] = "admin"
+    else:
+        if member_id == SHI_SHAN:
+            return HttpResponseRedirect('/login')
+        content['power'] = "anyone"
 
     content['member'] = Member.objects.get(id=member_id)
     content['pay_log'] = Personal_bill.objects.filter(member_id=member_id)
@@ -179,13 +182,13 @@ def edit_bill_table(request, table_id):
 
 def bill_table_detail(request, table_id):
     content = {}
+    members = Member.objects.all()
     if request.user.is_authenticated():
         content['power'] = "admin"
     else:
         content['power'] = "anyone"
     if 'info' in request.GET:
         content['info'] = request.GET['info']
-    members = Member.objects.all()
     phone = []
     for member in members:
         phone.append(member.phone)
@@ -247,6 +250,43 @@ def download_bill(request, table_id):
         data.update(line)
 
     filename = society.tool.create_xls(data)
+    f = open(filename)
+    file_data = f.read()
+    f.close()
+    response = HttpResponse(file_data, content_type='application/-excel')
+    response['Content-Length'] = os.path.getsize(filename)
+    response['Content-Encoding'] = 'utf-8'
+    response['Content-Disposition'] = 'attachment;filename=%s' % filename
+    return response
+
+#show all the member active log and balance
+def download_member(request):
+    members = Member.objects.all()
+    bill_tables = Bill_table.objects.filter(created_at__year=request.GET["year"])
+    if request.GET["month"] != "0":
+        bill_tables = bill_tables.filter(created_at__month=request.GET["month"])
+
+    bill_comment = []
+    for bill_table in bill_tables:
+        bill_comment.append(bill_table.comment)
+
+    data = {}
+    for member in members:
+        line = {}
+        line[str(member.id)] = {
+            'id': member.id,
+            'name': member.name,
+            'phone': member.phone,
+            'balance': member.balance,
+        }
+        for bill_table in bill_tables:
+            bill = Personal_bill.objects.filter(bill_table=bill_table,member=member)
+            if bill.count() > 0:
+                line[str(member.id)][bill_table.comment] = bill[0].price
+            else:
+                 line[str(member.id)][bill_table.comment] = "x"
+        data.update(line)
+    filename = society.tool.create_member_xls(data, bill_comment)
     f = open(filename)
     file_data = f.read()
     f.close()

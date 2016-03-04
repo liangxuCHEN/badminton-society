@@ -22,6 +22,7 @@ urlpatterns = patterns('',
     url(r'^delete_personal_bill/(?P<personal_bill_id>\d+)/(?P<table_id>\d+)/$',
         views.delete_personal_bill, name='delete_personal_bill'),
     url(r'^download_bill/(?P<table_id>\d+)/$', views.download_bill, name='download_bill'),
+    url(r'^download_member/$', views.download_member, name='download_member'),
 )
 
 """

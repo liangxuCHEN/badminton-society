@@ -59,5 +59,28 @@
 </div>
  <hr>
  <a href="{% url 'add_one_member' %}" class="btn btn-info">添加会员</a>
- 
+ <form role="form" action="/download_member" method="get" class="form-inline">
+   <label>下载会员详细活动统计请点击这里： </label>
+   <select name="year" >
+     <option value="2016">2016年</option>
+     <option value="2017">2017年</option>
+     <option value="2018">2018年</option>
+     <option value="2019">2019年</option>
+   </select>
+   <select name="month" >
+     <option value="1">1月</option>
+     <option value="2">2月</option>
+     <option value="3">3月</option>
+     <option value="4">4月</option>
+     <option value="5">5月</option>
+     <option value="6">6月</option>
+     <option value="7">7月</option>
+     <option value="8">8月</option>
+     <option value="9">9月</option>
+     <option value="10">10月</option>
+     <option value="11">11月</option>
+     <option value="12">12月</option>
+     <option value="0">全年</option>
+   </select>
+   <input type="submit" value="下载" class="btn btn-primary"/></form>
 {% endblock %}
