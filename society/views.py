@@ -204,6 +204,28 @@ def bill_table_detail(request, table_id):
     content['bill_table'] = bill_table
     return render(request, 'bill_table_detail.html', content)
 
+def add_bill_by_scran(request, person_id):
+    if request.user.is_authenticated():
+        if request.method == 'POST':
+            data = request.POST
+            member = Member.objects.get(phone=data['member_phone'])
+            if member:
+                form = PersonalBillForm(data)
+                form.save()
+                member.balance = member.balance - int(data['price'])
+                member.save()
+                return redirect("/bill_table_detail/%s/?info=%s" % (data['bill_table'], u"成功添加"))
+            else:
+                return redirect(u"/bill_table_detail/%s/?info=%s" % (data['bill_table'], data['member_phone']+u" 不存在"))
+        else:
+            table = Bill_table.objects.last()
+            content = {}
+            content["table_id"] = table.id
+            content["comment"] = table.comment
+            content["person"] = Member.objects.get(id=person_id)
+            return render(request, "add_bill_by_scran.html", content)
+    else:
+        return HttpResponseRedirect("/login")
 
 def add_personal_bill(request):
     if request.user.is_authenticated():
