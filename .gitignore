@@ -1,3 +1,5 @@
 *.pyc
 *.json
 *.xls
+db.sqlite3
+.gitignore
