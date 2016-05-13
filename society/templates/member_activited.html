@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}积极会员{% endblock %}
+{% block content %}
+<div class="jumbotron" id="error">
+</div>
+<div class="jumbotron" id="member">
+{% if member_list %}
+<div class="row">
+  {% for member in member_list %}
+    <div class="col-sm-6 col-md-3" id="bill">
+    <div class="thumbnail">
+      <div class="caption">
+        <h3>{{member.member.name}}</h3>
+        <P>共参与活动  {{ member.praticipe }} 次</P>
+        <p><a href="{% url 'add_bill_by_scran' member.member.id %}" class="btn btn-primary">参与活动</a></p>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+ {% endif %}
+
+{% endblock %}
