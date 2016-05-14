@@ -29,7 +29,7 @@ def member_index(request):
     if request.user.is_authenticated():
         members = Member.objects.all()
     else:
-        members = Member.objects.exclude(id=25)
+        members = Member.objects.exclude(id=SHI_SHAN)
     if  request.GET != {}:
         name = request.GET.get('name', '')
         phone = request.GET.get("phone", "")
@@ -54,6 +54,36 @@ def member_index(request):
     content['member_list'] = member_page
     return render(request, 'member.html', content)
 
+def member_activited(request):
+    if request.user.is_authenticated():
+        members = Member.objects.exclude(id=SHI_SHAN)
+        activited_persons = []
+        if  request.GET != {}:
+            show_list_len = int(request.GET.get('num', '20'))
+        else:
+            show_list_len = 20
+
+        for member in members:
+            insert_flage = False
+            num_praticipe = len(Personal_bill.objects.filter(member_id=member.id))
+            tmp={
+                "member" : member, 
+                "praticipe" : num_praticipe,
+            }
+            if len(activited_persons) > 1:
+                for x in range(0, len(activited_persons)):
+                    if  activited_persons[x]["praticipe"] < num_praticipe:
+                        activited_persons.insert(x, tmp)
+                        insert_flage = True
+                        break
+                if not insert_flage:
+                    activited_persons.append(tmp)
+            else:
+                activited_persons.append(tmp)
+        content = {
+            "member_list" : activited_persons[:24],
+        }
+        return render(request, 'member_activited.html', content)
 
 def add_one_member(request):
     if request.user.is_authenticated():
